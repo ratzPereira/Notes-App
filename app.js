@@ -1,13 +1,47 @@
-const chalk = require('chalk');
+const chalk = require("chalk");         // changing color of the text
+const getNotes = require("./notes");    // getting data from other file in the project
+const yargs = require("yargs");         //input from user
 
 
-const getNotes = require('./notes');
+// Customize yargs version
+yargs.version('1.1.0');
 
-getNotes();
+//Create add command
+yargs.command({
+    command: 'add',
+    describe: 'Add a new note',
+    handler: function(){
+        console.log('Adding a new note!!!')
+    }
+})
 
-console.log(chalk.blue('Here I am in Blue!'));
+//Create remove command
+yargs.command({
+    command: 'remove',
+    describe: 'Remove a note',
+    handler: function(){
+        console.log('Removing a note!')
+    }
+})
 
-const greenMsg = chalk.green('Success');
-const boldGreenMsg = chalk.green.bgRed.bold('Success');
-console.log(greenMsg);
-console.log(boldGreenMsg);
+//Create list command
+yargs.command({
+    command: 'list',
+    describe: 'List all notes',
+    handler: function(){
+        console.log('Showing all the notes')
+    }
+})
+
+//Create read command
+yargs.command({
+    command: 'read',
+    describe: 'Read a note',
+    handler: function(){
+        console.log('Reading a note!')
+    }
+})
+
+console.log(yargs.argv);
+
+
