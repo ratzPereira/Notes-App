@@ -1,56 +1,56 @@
 //new need fs to read/write on files
-const fs = require('fs');
-
+const fs = require("fs");
 
 const getNotes = function () {
-
-    console.log('Your notes');
-}
-
+  console.log("Your notes");
+};
 
 const addNote = function (title, body) {
     const notes = loadNotes();
+    const duplicateNotes = notes.filter(function (note) {
 
+        return note.title === title;
+  });
+
+
+  if (duplicateNotes.length === 0) {
     //array method push, to get our note
     notes.push({
-        title: title,
-        body: body
-    }) 
+      title: title,
+      body: body,
+    });
 
     saveNote(notes);
-
-}
+    console.log("New note added");
+  } else {
+    console.log("ERROR!!! Note title taken!");
+  }
+};
 
 //we need to safe our note , so we create an new reusable function to that
-const saveNote = function(notes) {
-
-    const dataJSON = JSON.stringify(notes);
-    fs.writeFileSync('notes.json', dataJSON);
-}
+const saveNote = function (notes) {
+  const dataJSON = JSON.stringify(notes);
+  fs.writeFileSync("notes.json", dataJSON);
+};
 
 //we need to load the notes first and every time, so lets create one reuseable function for that
-const loadNotes = function (){
+const loadNotes = function () {
+  try {
+    const dataBuffer = fs.readFileSync("notes.json"); // if we had no file it fails , so we create defensive code ( try/catch )
+    const dataJSON = dataBuffer.toString(); //converting binary to string
 
-    try{
-
-        const dataBuffer = fs.readFileSync('notes.json'); // if we had no file it fails , so we create defensive code ( try/catch )
-        const dataJSON = dataBuffer.toString();  //converting binary to string
-
-        return JSON.parse(dataJSON);  // now we take the string, and parse it to json object and return that
-
-    } catch (e) {
-        //if the code above fails we return an empty array
-        return [];
-
-    }
-}
+    return JSON.parse(dataJSON); // now we take the string, and parse it to json object and return that
+  } catch (e) {
+    //if the code above fails we return an empty array
+    return [];
+  }
+};
 
 //module.exports= getNotes;  <- exportar só uma funciton
 //exportar várias "coisas" transformanos num object com varias properties
 
 module.exports = {
-
-    //property with same name that the funcion
-    getNotes: getNotes,
-    addNote: addNote
-}
+  //property with same name that the funcion
+  getNotes: getNotes,
+  addNote: addNote,
+};
