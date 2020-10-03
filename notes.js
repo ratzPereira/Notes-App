@@ -12,24 +12,24 @@ const addNote = (title, body) => {
   const notes = loadNotes();
 
   //passamos o filter por todas as notas existentes, se existir uma com o titulo igual, ela vai ser adicionada a const duplicateNotes
-  const duplicateNotes = notes.filter((note) => note.title === title
-    
-  );
+  //const duplicateNotes = notes.filter((note) => note.title === title)  // melhor usar o find pk assim ia ver pela array toda
 
+  const duplicateNote = notes.find((note) => note.title === title)// melhor que o filter. o find() para quando encontrar o 1º
+  
   //se o filtro a cima passar e a length for 0, adiciona a nova nota, se nao, não adiciona e manda um msg de erro
-  if (duplicateNotes.length === 0) {
+  if (!duplicateNote) {
     //array method push, to get our note
     notes.push({
       title: title,
       body: body,
-    });
+    })
 
     saveNote(notes);
     console.log(chalk.green.inverse("New note added"));
   } else {
     console.log(chalk.red.inverse("ERROR!!! Note title taken!"));
   }
-};
+}
 
 //we need to safe our note , so we create an new reusable function to that
 const saveNote = (notes) => {
@@ -66,6 +66,35 @@ const removeNote = (title) => {
   }
 };
 
+const listNotes = () => {
+    const notes = loadNotes();
+
+    console.log(chalk.green.inverse('Your Notes list: \n'))
+
+    notes.filter((note) => console.log(chalk.white.inverse('Title: ' + note.title)))
+}
+
+
+const readNote = (title) => {
+
+  const notes = loadNotes();
+  const note = notes.find((note) => note.title === title)
+
+    if(!note){
+      
+      console.log(chalk.red.inverse('That note title does not exist'))
+
+    } else {
+      console.log(chalk.white.inverse( 'Note title: ') + title)
+      console.log(chalk.white.inverse('Your note: \n') + chalk.white(note.body))
+    }
+}
+
+
+
+
+
+
 //module.exports= getNotes;  <- exportar só uma funciton
 //exportar várias "coisas" transformanos num object com varias properties
 
@@ -74,4 +103,6 @@ module.exports = {
   getNotes: getNotes,
   addNote: addNote,
   removeNote: removeNote,
+  listNotes: listNotes,
+  readNote: readNote
 };
